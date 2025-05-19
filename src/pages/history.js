@@ -32,7 +32,7 @@ export default function HistoryPage() {
     <div className="min-h-screen  bg-gray-900 dark:bg-[#bfdddf] p-6">
       <h1 className="text-2xl font-bold mb-4 dark:text-black  text-gray-300">🔍 Search History</h1>
       {history.length === 0 ? (
-        <p>No history found.</p>
+        <p className="dark:text-black text-gray-300">No history found.</p>
       ) : (
         <ul className="space-y-2">
           {history.map((city, idx) => (
