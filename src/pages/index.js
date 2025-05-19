@@ -65,8 +65,7 @@ export default function Home() {
       localStorage.setItem("searchHistory", JSON.stringify(history));
     }
   };
-console.log("SearchBar is:", SearchBar);
-console.log("WeatherCard is:", WeatherCard);
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-900 dark:bg-[#bfdddf]">
