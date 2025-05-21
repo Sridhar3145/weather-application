@@ -15,6 +15,8 @@ export default function Home() {
     const data = await fetchWeatherByCity(city);
 
     if (data && data.main) {
+      console.log(data);
+      
       setWeather(data);
       saveToHistory(city);
     } else {
