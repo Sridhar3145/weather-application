@@ -36,6 +36,7 @@ export default function Home() {
         },
         (error) => {
           console.error("Geolocation error:", error);
+          setError("Location not available. Please search manually.");
         },
         {
           enableHighAccuracy: true, // ✅ This improves location accuracy
