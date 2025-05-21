@@ -38,8 +38,8 @@ export default function Home() {
           console.error("Geolocation error:", error);
         },
         {
-          enableHighAccuracy: true, // ✅ This improves location accuracy
-          timeout: 5000,
+          enableHighAccuracy: false, // ✅ This improves location accuracy
+          timeout: 10000,
           maximumAge: 0,
         }
       );
