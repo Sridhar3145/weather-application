@@ -7,47 +7,59 @@ export default function HistoryPage() {
   const router = useRouter();
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("searchHistory");
-      const parsed = saved ? JSON.parse(saved) : [];
-      setHistory(parsed);
-    } catch (e) {
-      console.error("Failed to parse search history JSON:", e);
-      localStorage.removeItem("searchHistory");
-      setHistory([]);
-    }
+    const fetchHistory = async () => {
+      try {
+        const res = await fetch("/api/history");
+        const data = await res.json();
+        setHistory(data);
+      } catch (err) {
+        console.error("Failed to load history:", err);
+      }
+    };
+
+    fetchHistory();
   }, []);
 
   const goToDetails = (city) => {
     router.push(`/details?city=${encodeURIComponent(city)}`);
   };
 
-  const removeCity = (cityToRemove) => {
-    const updatedHistory = history.filter(city => city !== cityToRemove);
-    setHistory(updatedHistory);
-    localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
+  const removeCity = async (id) => {
+    try {
+      await fetch("/api/history", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+
+      setHistory((prev) => prev.filter((item) => item._id !== id));
+    } catch (err) {
+      console.error("Failed to delete:", err);
+    }
   };
 
   return (
-    <div className="min-h-screen  bg-gray-900 dark:bg-[#bfdddf] p-6">
-      <h1 className="text-2xl font-bold mb-4 dark:text-black  text-gray-300">🔍 Search History</h1>
+    <div className="min-h-screen bg-gray-900 dark:bg-[#bfdddf] p-6">
+      <h1 className="text-2xl font-bold mb-4 dark:text-black text-gray-300">
+        🔍 Search History
+      </h1>
       {history.length === 0 ? (
         <p className="dark:text-black text-gray-300">No history found.</p>
       ) : (
         <ul className="space-y-2">
-          {history.map((city, idx) => (
+          {history.map((entry) => (
             <li
-              key={idx}
-              className="flex justify-between items-center dark:bg-[#70BDC2] bg-gray-700 00 p-3 rounded shadow hover:bg transition"
+              key={entry._id}
+              className="flex justify-between items-center dark:bg-[#70BDC2] bg-gray-700 p-3 rounded shadow"
             >
               <span
                 className="cursor-pointer dark:text-black text-gray-300"
-                onClick={() => goToDetails(city)}
+                onClick={() => goToDetails(entry.city)}
               >
-                {city}
+                {entry.city}
               </span>
               <button
-                onClick={() => removeCity(city)}
+                onClick={() => removeCity(entry._id)}
                 className="dark:text-black text-gray-300 dark:hover:text-gray-600 hover:text-red-600"
                 title="Remove"
               >
