@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const weatherSearchSchema = new mongoose.Schema({
-  city: String,
+  city: {
+    type: String,
+    unique: true,
+  },
   searchedAt: {
     type: Date,
     default: Date.now,

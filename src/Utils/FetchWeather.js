@@ -1,8 +1,5 @@
-
 const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
 
-
-// Fetch current weather by city name
 export const fetchWeatherByCity = async (city) => {
   try {
     const res = await fetch(
@@ -16,7 +13,6 @@ export const fetchWeatherByCity = async (city) => {
   }
 };
 
-// Fetch current weather by coordinates
 export const fetchWeatherByCoords = async (lat, lon) => {
   try {
     const res = await fetch(
@@ -30,7 +26,6 @@ export const fetchWeatherByCoords = async (lat, lon) => {
   }
 };
 
-//  Fetch 5-day / 3-hour forecast by city name
 export const fetchForecastByCity = async (city) => {
   try {
     const res = await fetch(

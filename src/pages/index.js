@@ -10,22 +10,19 @@ export default function Home() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
 
-  // 🔁 Weather search by city
   const fetchWeather = async (city) => {
-    setError(null); // reset error
+    setError(null);
     const data = await fetchWeatherByCity(city);
 
     if (data && data.main) {
       setWeather(data);
-      saveToLocalHistory(city); // 👉 for localStorage
-      saveToMongoHistory(city); // 👉 for MongoDB
+      saveToMongoHistory(city);
     } else {
       setWeather(null);
       setError("No weather data available for that city.");
     }
   };
 
-  // 📍 Geolocation fetch on mount
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -47,28 +44,6 @@ export default function Home() {
     }
   }, []);
 
-  // 💾 Save to localStorage (for UI)
-  const saveToLocalHistory = (city) => {
-    let history = [];
-    try {
-      const saved = localStorage.getItem("searchHistory");
-      history = saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error("Failed to parse local history:", e);
-      localStorage.removeItem("searchHistory");
-      history = [];
-    }
-
-    const normalizedCity = city.trim().toLowerCase();
-    const normalizedHistory = history.map((c) => c.trim().toLowerCase());
-
-    if (!normalizedHistory.includes(normalizedCity)) {
-      history.push(city.trim());
-      localStorage.setItem("searchHistory", JSON.stringify(history));
-    }
-  };
-
-  // 🧠 Save to MongoDB
   const saveToMongoHistory = async (city) => {
     try {
       await fetch("/api/history", {
